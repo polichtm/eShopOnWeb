@@ -53,6 +53,7 @@ jobs:
         RANDOMIZED_NAME="az400webapp${HASH}"
         echo "Generated web app name: $RANDOMIZED_NAME"
         echo "WEBAPP_NAME=$RANDOMIZED_NAME" >> $GITHUB_ENV
+        echo ${{ env.WEBAPP_NAME }}
     
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
