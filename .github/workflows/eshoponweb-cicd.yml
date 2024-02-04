@@ -5,11 +5,11 @@ on: workflow_dispatch
 
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
-  RESOURCE-GROUP: rg-az400-eshoponweb-westeurope
+  RESOURCE-GROUP: rg-az400-eshoponweb-eastus
   LOCATION: westeurope
   TEMPLATE-FILE: .azure/bicep/webapp.bicep
   SUBSCRIPTION-ID: 4930a01d-2f40-471e-a925-1d63f6482128
-  WEBAPP-NAME: az400-webapp-westeurope-2858728293
+  WEBAPP-NAME: az400-webapp-eastus-27234082
 
 jobs:
   #Build, test and publish .net web project in repository
