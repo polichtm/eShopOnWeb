@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  RESOURCE_GROUP_NAME: rg-az400-eshoponweb-westeurope
+  RESOURCE-GROUP: rg-az400-eshoponweb-westeurope
   LOCATION: westeurope
   TEMPLATE-FILE: .azure/bicep/webapp.bicep
   SUBSCRIPTION-ID: 4930a01d-2f40-471e-a925-1d63f6482128
