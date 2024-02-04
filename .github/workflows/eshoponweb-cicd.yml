@@ -77,7 +77,7 @@ jobs:
         subscriptionId: ${{ env.SUBSCRIPTION-ID }}
         resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
         template: bicep-template/webapp.bicep
-        parameters: "webAppName=$WEBAPP_NAME"
+        parameters: webAppName=$WEBAPP_NAME
         failOnStdErr: false   
     
     - name: Publish Website to WebApp
