@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      # Define the output variable to share with other jobs
-      steps: id: generate_name
+      id: generate_name
+      WEBAPP_NAME: ${{ steps.generate_name.outputs.WEBAPP_NAME }}
 
     steps:
     - name: Generate unique name
