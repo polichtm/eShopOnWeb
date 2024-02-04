@@ -10,23 +10,6 @@ env:
   SUBSCRIPTION-ID: 4930a01d-2f40-471e-a925-1d63f6482128
 
 jobs:
-  generate_name:
-    runs-on: ubuntu-latest
-
-    outputs:
-      id: generate_name
-      WEBAPP_NAME: ${{ steps.generate_name.outputs.WEBAPP_NAME }}
-
-    steps:
-    - name: Generate unique name
-      id: generate_name
-      run: |
-        CLEANED_NAME=$(echo "$RESOURCE_GROUP_NAME" | tr -dc '[:alnum:]' | tr '[:upper:]' '[:lower:]')       
-        HASH=$(echo -n "$CLEANED_NAME" | md5sum | cut -c1-5)
-        UNIQUE_NAME="az400webapp${HASH}"
-        echo "Generated web app name: $UNIQUE_NAME"
-        echo "WEBAPP_NAME=$UNIQUE_NAME" >> $GITHUB_ENV
-
   buildandtest:
     runs-on: ubuntu-latest
     needs: generate_name
@@ -63,6 +46,15 @@ jobs:
     environment:
       name: 'Development'
     steps:
+    - name: Generate unique name
+      id: generate_name
+      run: |
+        CLEANED_NAME=$(echo "$RESOURCE_GROUP_NAME" | tr -dc '[:alnum:]' | tr '[:upper:]' '[:lower:]')       
+        HASH=$(echo -n "$CLEANED_NAME" | md5sum | cut -c1-5)
+        UNIQUE_NAME="az400webapp${HASH}"
+        echo "Generated web app name: $UNIQUE_NAME"
+        echo "WEBAPP_NAME=$UNIQUE_NAME" >> $GITHUB_ENV
+    
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
       with:
@@ -86,11 +78,11 @@ jobs:
         subscriptionId: ${{ env.SUBSCRIPTION-ID }}
         resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
         template: bicep-template/webapp.bicep
-        parameters: 'webAppName=${{ needs.generate_name.outputs.WEBAPP_NAME }} location=${{ env.LOCATION }}'
+        parameters: "webAppName=$WEBAPP_NAME"
         failOnStdErr: false   
     
     - name: Publish Website to WebApp
       uses: Azure/webapps-deploy@v2
       with:
-        app-name: ${{ needs.generate_name.outputs.WEBAPP_NAME }}
+        app-name: $WEBAPP_NAME
         package: .net-app
