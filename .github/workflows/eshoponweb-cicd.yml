@@ -48,11 +48,11 @@ jobs:
     - name: Generate unique name
       id: generate_name
       run: |
-        CLEANED_NAME=$(echo "$RESOURCE_GROUP_NAME" | tr -dc '[:alnum:]' | tr '[:upper:]' '[:lower:]')       
-        HASH=$(echo -n "$CLEANED_NAME" | md5sum | cut -c1-5)
-        WEBAPP_NAME="az400webapp${HASH}"
-        echo "Generated web app name: $WEBAPP_NAME"
-        echo "WEBAPP_NAME=$UNIQUE_NAME" >> $GITHUB_ENV
+        CONVERTED_NAME=$(echo "$RESOURCE_GROUP_NAME" | tr -dc '[:alnum:]' | tr '[:upper:]' '[:lower:]')       
+        HASH=$(echo -n "$CONVERTED_NAME" | md5sum | cut -c1-5)
+        RANDOMIZED_NAME="az400webapp${HASH}"
+        echo "Generated web app name: $RANDOMIZED_NAME"
+        echo "WEBAPP_NAME=$RANDOMIZED_NAME" >> $GITHUB_ENV
     
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
@@ -77,7 +77,7 @@ jobs:
         subscriptionId: ${{ env.SUBSCRIPTION-ID }}
         resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
         template: bicep-template/webapp.bicep
-        parameters: webAppName=$WEBAPP_NAME
+        parameters: webAppName=${{ env.WEBAPP_NAME }}
         failOnStdErr: false   
     
     - name: Publish Website to WebApp
