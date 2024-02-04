@@ -7,7 +7,7 @@ on: workflow_dispatch
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
   # RESOURCE-GROUP: rg-az400-eshoponweb-NAME
-  RESOURCE_GROUP: rg-az400-eshoponweb-westeurope
+  RESOURCE_GROUP_NAME: rg-az400-eshoponweb-westeurope
   LOCATION: westeurope
   TEMPLATE-FILE: .azure/bicep/webapp.bicep
   # SUBSCRIPTION-ID: YOUR-SUBS-ID
@@ -23,15 +23,11 @@ jobs:
     - name: Generate unique name
       id: generate_name
       run: |
-        CLEANED_NAME=$(echo "$RESOURCE_GROUP" | tr -dc '[:alnum:]' | tr '[:upper:]' '[:lower:]')       
+        CLEANED_NAME=$(echo "$RESOURCE_GROUP_NAME" | tr -dc '[:alnum:]' | tr '[:upper:]' '[:lower:]')       
         HASH=$(echo -n "$CLEANED_NAME" | md5sum | cut -c1-5)
         UNIQUE_NAME="az400webapp${HASH}"
         echo "Generated web app name: $UNIQUE_NAME"
         echo "WEBAPP_NAME=$UNIQUE_NAME" >> $GITHUB_ENV
-        
-    - name: Use the unique name in subsequent steps
-      run: |
-        echo "Using Unique Name: $UNIQUE_NAME"
 
   #Build, test and publish .net web project in repository
   buildandtest:
@@ -99,7 +95,7 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ env.SUBSCRIPTION-ID }}
-        resourceGroupName: ${{ env.RESOURCE-GROUP }}
+        resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
         template: bicep-template/webapp.bicep
         parameters: 'webAppName=${{ env.WEBAPP_NAME }} location=${{ env.LOCATION }}'
         failOnStdErr: false   
