@@ -50,8 +50,8 @@ jobs:
       run: |
         CLEANED_NAME=$(echo "$RESOURCE_GROUP_NAME" | tr -dc '[:alnum:]' | tr '[:upper:]' '[:lower:]')       
         HASH=$(echo -n "$CLEANED_NAME" | md5sum | cut -c1-5)
-        UNIQUE_NAME="az400webapp${HASH}"
-        echo "Generated web app name: $UNIQUE_NAME"
+        WEBAPP_NAME="az400webapp${HASH}"
+        echo "Generated web app name: $WEBAPP_NAME"
         echo "WEBAPP_NAME=$UNIQUE_NAME" >> $GITHUB_ENV
     
     - name: Download artifact from build job
